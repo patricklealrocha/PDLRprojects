@@ -1,1 +1,1 @@
-let calculadora = new CalculatorEvents();
+let calculator = new CalculatorEvents();
