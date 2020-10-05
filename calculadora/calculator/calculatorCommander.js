@@ -8,6 +8,7 @@ class CalculatorCommander
     {    
         this._displayCalc = '0';
         this.initKeyboard();
+        this.initMouseEvents();
         this.initialize();
     }
     /* método principal do projeto
@@ -81,8 +82,30 @@ class CalculatorCommander
             }
         });
     }
-    // Eventos do mouse
-    
+    // Eventos do mouse / As vezes pode ser que a pessoa 'clique' e arraste, nesse caso o método addEventListener não vai conseguir tratar múltiplos eventos. Vamos criar um método para que possamos fazer isso, melhorando a usabilidade da calculadora
+    addEventListenerAll(element, events, fn){
+        
+        events.split(' ').forEach(event =>{
+
+            element.addEventListener(event,fn,false);
+        });
+    }
+    initMouseEvents(){
+
+        // aqui criamos um array com os botões de nosso HTML
+        let buttons = document.querySelectorAll('.row > button');
+
+        // para que seja possível identificar cada botão de nosso HTML precisaremos percorrer o array
+        buttons.forEach((btn, index) =>    
+        {
+            //enquanto percorre o array o evento click consegue capturar cada botão de nossa aplicação
+            this.addEventListenerAll(btn,'click drag', e =>
+            {
+                console.log(btn.textContent);
+            });
+        });
+        
+    }    
     //getters and setters estarão a partir daqui
     get displayCalc()
     {
