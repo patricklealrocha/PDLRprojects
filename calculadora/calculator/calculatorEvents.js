@@ -66,5 +66,5 @@ class CalculatorEvents
                     break;
             }
         });
-    }
+    }    
 }
