@@ -1,1 +1,1 @@
-let calculator = new CalculatorEvents();
+let calculator = new CalculatorCommander();

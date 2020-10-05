@@ -52,6 +52,14 @@
         font-size: 48px;
         font-weight: 600;
     }
+    #historic{
+        color: rgb(100, 99, 99);
+        text-align: right;
+        bottom: 0;
+        width: 100%;
+        font-size: 20px;
+        font-weight: 500;
+    }
     .btn-number {
         background-color: #EFEFEF;
         font-size: 24px;
@@ -72,8 +80,11 @@
     <div class="center">
         <div id="calculadora">
             <header>
+                <div id="historic">
+                    
+                </div>
                 <div id="display">
-                    0
+                    
                 </div>
             </header>
             <section class="container">
@@ -117,7 +128,7 @@
         </div>
     </div>
     
-    <script src="calculator/calculatorEvents.js"></script>
+    <script src="calculator/calculatorCommander.js"></script>
     <script src="calculator/main.js"></script>
 </body>
 </html>
