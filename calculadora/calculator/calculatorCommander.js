@@ -1,5 +1,5 @@
-/*Classe que lidará com os eventos de clique e do teclado.
-    Vou procurar manter cada etapa em poucas linhas deixando o código mais fácil de ler e comentado. */
+/*Classe que irá controlar as regras da calculadora
+Será o mais comentado possível. */
 
 // Aqui será programado os botões do teclado
 class CalculatorEvents
