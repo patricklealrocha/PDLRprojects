@@ -5,7 +5,9 @@ class CalculatorCommander
 {
     //método iniciado assim que é criado uma instância da classe
     constructor()
-    {    
+    {   
+        //this._resgister = [];
+        this._operation = [];
         this._displayCalc = '0';
         this.initKeyboard();
         this.initMouseEvents();
@@ -32,25 +34,25 @@ class CalculatorCommander
             switch(e.key)
             {
                 case 'Escape':
-                    console.log('C');
+                    this.clearAll();
                     break;
                 case 'Backspace':
-                    console.log('←');
+                    this.clearEntry();
                     break;
                 case '+':
                 case '-':
                 case '*':
                 case '/':
                 case '%':
-                    console.log(e.key);
+                    this.addOperation(e.key);
                     break;
                 case 'Enter':
                 case '=':
-                    console.log(e.key);
+                    this.addOperation(e.key);
                     break;
                 case '.':
                 case ',':
-                    console.log(e.key);
+                    this.addOperation(e.key);
                     break;
                 case '0':
                 case '1':
@@ -62,7 +64,7 @@ class CalculatorCommander
                 case '7':
                 case '8':
                 case '9':
-                console.log(e.key);
+                    this.addOperation(e.key);
                     break;
                 case '@':
                     console.log('√');
@@ -74,7 +76,7 @@ class CalculatorCommander
                     console.log('¹/x');
                     break
                 case 'Delete':
-                    console.log('CE');
+                    this.clearEntry();
                     break;
                 case 'n': // tecla escolhida , não é a padrão utilizada pela calculadora do windows
                     console.log('±');
@@ -101,11 +103,150 @@ class CalculatorCommander
             //enquanto percorre o array o evento click consegue capturar cada botão de nossa aplicação
             this.addEventListenerAll(btn,'click drag', e =>
             {
-                console.log(btn.textContent);
+                let btnText = btn.textContent ;
+
+                this.execBtn(btnText);
             });
         });
         
-    }    
+    }
+    //Ação que será realizada ao clicar em determinado botão
+    execBtn(value){
+        
+        switch(value)
+            {
+                case 'C':
+                    this.clearAll();
+                    break;
+                case '←':
+                    this.clearEntry();
+                    break;
+                case 'CE':
+                    this.clearEntry();
+                    break;
+                case '+':
+                case '-':
+                case 'X':
+                case '÷':
+                    this.addOperation(value);
+                    break;
+                case '%':
+                    this.addOperation(value);
+                    break;
+                case '=':
+                    this.addOperation(value);
+                    break;
+                case ',':
+                    this.addOperation(value);
+                    break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    this.addOperation(Number(value));
+                    break;
+                case '√':
+                    this.addOperation(value);
+                    break;
+                case 'x²':
+                    this.addOperation(value);
+                    break;
+                case '¹/x':
+                    this.addOperation(value);
+                    break
+                case '±': 
+                    this.addOperation(value);
+                    break;
+            }
+
+    }
+     /*A partir daqui serão programados os métodos necessários para realizar o cálculo e outras ações comuns a calculadora padrão.*/
+     
+     //Limpa tudo
+    clearAll(){
+        //this._resgister = [];
+        this._operation = [];
+     }
+     //Limpa o valor de entrada
+    clearEntry(){
+        
+        //this._resgister.pop();
+        this._operation.pop();
+     }
+     //Buscamos o último item adicionado para fazer comparação
+    getLastOperation(){
+
+        return this._operation[this._operation.length -1];
+
+     }
+     //Adicionamos um item após a comparação
+    setLastOperation(value){
+
+        this._operation[this._operation.length - 1] = value;
+
+     }
+     //Aqui identificamos as operações simples. 
+     //Aqui se a pessoa digita uma operação sim e depois outra simples, a operação irá sobrepor a outra
+    isOperatorS(value){
+
+        return (['+','-','*','/'].indexOf(value) > -1 );
+
+     }
+     // Aqui as operações serão limitadas a três valores em caso de operações simples
+     // Se adicionamos % ou Raiz ou potência ou x/1 então haverá outra operação
+    pushOperation(value){
+
+        this._operation.push(value);
+
+        if(this._operation.length > 3){
+
+            let last = this._operation.pop();
+            console.log(this._operation);
+        }
+
+     }
+     // aqui adicionamos números ou operadores
+    addOperation(value){
+
+        if(isNaN(this.getLastOperation())){
+
+            if(this.isOperatorS(value)){
+
+                    this.setLastOperation(value);
+
+            } else if(isNaN(value)) {
+
+                console.log("Outra Coisa " + value);
+
+            } else {
+
+                this.pushOperation(value);
+
+            }
+
+        } else {
+
+            if(this.isOperatorS(value)){
+
+                this.pushOperation(value);
+
+            }else{
+                
+                let newValue = this.getLastOperation().toString() + value.toString();
+                this.setLastOperation(Number(newValue));
+            }
+            
+        }
+        console.log(this._operation);
+        //this._resgister.push(value);
+        //this._operation.push(value);
+     }
     //getters and setters estarão a partir daqui
     get displayCalc()
     {
