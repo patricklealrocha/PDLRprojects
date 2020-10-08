@@ -206,9 +206,17 @@ class CalculatorCommander
 
         if(this._operation.length > 3){
 
-            let last = this._operation.pop();
-            console.log(this._operation);
+            this.calc();
         }
+     }
+     //Aqui a operação será realizada
+     calc(){
+
+        let last = this._operation.pop();
+
+        let result = eval(this._operation.join(''));
+
+        this._operation = [result,last];
 
      }
      // aqui adicionamos números ou operadores
@@ -240,12 +248,19 @@ class CalculatorCommander
                 
                 let newValue = this.getLastOperation().toString() + value.toString();
                 this.setLastOperation(Number(newValue));
+
+                this.setLastNumberToDisplay();
+
             }
             
         }
         console.log(this._operation);
         //this._resgister.push(value);
         //this._operation.push(value);
+     }
+     //Mostrar item no Display
+     setLastNumberToDisplay(){
+         
      }
     //getters and setters estarão a partir daqui
     get displayCalc()
