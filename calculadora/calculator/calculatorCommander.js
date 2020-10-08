@@ -7,8 +7,10 @@ class CalculatorCommander
     constructor()
     {   
         //this._resgister = [];
+        this._lastOperator = '';
+        this._lastNumber = '';
         this._operation = [];
-        this._displayCalc = '0';
+        this._displayCalcEl = document.querySelector('#display');
         this.initKeyboard();
         this.initMouseEvents();
         this.initialize();
@@ -18,10 +20,12 @@ class CalculatorCommander
     initialize()
     {
         // O El é uma convenção aplicada para fazer referência ao elemento HTML
-        let displayCalcEl = document.querySelector('#display');
+        //let displayCalcEl = document.querySelector('#display');
         let displayHistEl = document.querySelector('#historic');
+        
+        this.setLastNumberToDisplay();
 
-        displayCalcEl.innerHTML = '4567';
+        
         displayHistEl.innerHTML = 'registro das últimas operações realizadas';
     }
     // Controlando Eventos do Teclado
@@ -48,11 +52,11 @@ class CalculatorCommander
                     break;
                 case 'Enter':
                 case '=':
-                    this.addOperation(e.key);
+                    this.calc();
                     break;
                 case '.':
                 case ',':
-                    this.addOperation(e.key);
+                    this.addDot();
                     break;
                 case '0':
                 case '1':
@@ -64,7 +68,7 @@ class CalculatorCommander
                 case '7':
                 case '8':
                 case '9':
-                    this.addOperation(e.key);
+                    this.addOperation(Number(e.key));
                     break;
                 case '@':
                     console.log('√');
@@ -134,10 +138,10 @@ class CalculatorCommander
                     this.addOperation(value);
                     break;
                 case '=':
-                    this.addOperation(value);
+                    this.calc();
                     break;
                 case ',':
-                    this.addOperation(value);
+                    this.addDot();
                     break;
                 case '0':
                 case '1':
@@ -172,12 +176,16 @@ class CalculatorCommander
     clearAll(){
         //this._resgister = [];
         this._operation = [];
+        this._lastNumber = '';
+        this._lastOperator = '';
+        this.setLastNumberToDisplay();
      }
      //Limpa o valor de entrada
     clearEntry(){
         
         //this._resgister.pop();
         this._operation.pop();
+        this.setLastNumberToDisplay();
      }
      //Buscamos o último item adicionado para fazer comparação
     getLastOperation(){
@@ -198,6 +206,9 @@ class CalculatorCommander
         return (['+','-','*','/'].indexOf(value) > -1 );
 
      }
+     isOperatorC(value){
+         return (['√','x²','¹/x','%'].indexOf(value) > -1);
+     }
      // Aqui as operações serão limitadas a três valores em caso de operações simples
      // Se adicionamos % ou Raiz ou potência ou x/1 então haverá outra operação
     pushOperation(value){
@@ -206,8 +217,15 @@ class CalculatorCommander
 
         if(this._operation.length > 3){
 
-            this.calc();
+            if(!this.isOperatorC){
+                this.calc();
+            }
+            //else if (){}
         }
+     }
+     getResult(){
+         
+         return eval(this._operation.join(''));
      }
      //Aqui a operação será realizada
      calc(){
@@ -217,6 +235,8 @@ class CalculatorCommander
         let result = eval(this._operation.join(''));
 
         this._operation = [result,last];
+
+        this.setLastNumberToDisplay();
 
      }
      // aqui adicionamos números ou operadores
@@ -235,6 +255,7 @@ class CalculatorCommander
             } else {
 
                 this.pushOperation(value);
+                this.setLastNumberToDisplay();
 
             }
 
@@ -260,15 +281,29 @@ class CalculatorCommander
      }
      //Mostrar item no Display
      setLastNumberToDisplay(){
+
+        let lastNumber;
+
+        for (let i  = this._operation.length - 1; i >= 0 ; i--){
+
+            if(!this.isOperatorS(this._operation[i])){
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
          
+        this.displayCalc = lastNumber;
      }
     //getters and setters estarão a partir daqui
     get displayCalc()
     {
-        return this._displayCalc;
+        return this._displayCalcEl.innerHTML;
     }
     set displayCalc(value)
     {
-        this._displayCalc = value;
+        if(value.toString().length > 10){
+            this.displayCalc = 'Não é possível realizar mais cálculos';
+        }
+        this._displayCalcEl.innerHTML = value;
     }
 }
